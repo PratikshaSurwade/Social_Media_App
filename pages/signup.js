@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import CommonInputs from "../components/Common/CommonInputs";
 import ImageDropDiv from "../components/Common/ImageDropDiv";
-import baseurl from "../utils/baseUrl";
+import baseUrl from "../utils/baseUrl";
 import axios from "axios";
 import {Form,Button,Message,Segment,TextArea,Divider,} from "semantic-ui-react";
 import {
@@ -60,14 +60,21 @@ function signup() {
 
 
   const checkUsername = async() => {
+    setUsernameLoading(true)
     try {
 
-      const res=await axios.get(`${baseUrl}/api/signup/${username}`)
+      const res=await axios.get(`${baseUrl}/api/signup/${username}`);
+      if(res.data === "Available") {
+        setUsernameAvailable(true);
+        setUser(prev => ({ ...prev,username }));
+
+      }
       
     } catch (error) {
       setErrorMsg('Username not Available')
     }
 
+    setUsernameLoading(false)
   }
 
 
