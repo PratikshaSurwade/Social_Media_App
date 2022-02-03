@@ -54,9 +54,11 @@ function signup() {
 
 
   useEffect(() => {
-    const isUser=Object.values({name,email,password,bio}).every(item => Boolean(item))
+    const isUser=Object.values({name,email,password,bio}).every(item => 
+		Boolean(item)
+	);
     isUser ? setSubmitDisabled(false) : setSubmitDisabled(true)
-  },[user])
+  },[user]);
 
 
   const checkUsername = async() => {

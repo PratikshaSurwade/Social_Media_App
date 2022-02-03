@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import {Form,Button,Message,Segment,TextArea,Divider,} from "semantic-ui-react";
-
 import baseurl from "../utils/baseUrl";
 import axios from "axios";
 import {HeaderMessage ,FooterMessage} from "../components/Common/WelcomeMessage";
