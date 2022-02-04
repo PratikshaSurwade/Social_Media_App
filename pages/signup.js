@@ -8,7 +8,10 @@ import {
   HeaderMessage,
   FooterMessage,
 } from "../components/Common/WelcomeMessage";
+import {registerUser} from "../utils/authUser";
+import uploadPic from "../utils/uploadPicToCloudinary";
 const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
+let cancel;
 
 function signup() {
   const [user, setUser] = useState({
@@ -64,8 +67,15 @@ function signup() {
   const checkUsername = async() => {
     setUsernameLoading(true)
     try {
+      cancel && cancel();
 
-      const res=await axios.get(`${baseUrl}/api/signup/${username}`);
+      const CancelToken = axios.CancelToken;
+
+
+
+      const res=await axios.get(`${baseUrl}/api/signup/${username}`,{cancelToken:new CancelToken (canceler => {
+        cancel = canceler;
+      })});
       if(res.data === "Available") {
         setUsernameAvailable(true);
         setUser(prev => ({ ...prev,username }));
@@ -73,11 +83,11 @@ function signup() {
       }
       
     } catch (error) {
-      setErrorMsg('Username not Available')
+      setErrorMsg("Username not Available")
     }
 
     setUsernameLoading(false)
-  }
+  };
 
 
 
@@ -87,7 +97,19 @@ function signup() {
   }, [username])
 
 
-  const handleSubmit = (e) => e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormLoading(true);
+     
+    let profilePicUrl;
+    if(media!==null){
+      profilePicUrl = await uploadPic(media);
+    }
+    if(media!==null && !profilePicUrl){
+      setFormLoading(false)
+      return setErrorMsg('Error Uploading Image')
+    }
+    await registerUser(user,profilePicUrl,setErrorMsg,setFormLoading)
 
 
   return (
@@ -193,5 +215,5 @@ function signup() {
     </>
   );
 }
-
+}
 export default signup;
