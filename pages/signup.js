@@ -89,13 +89,10 @@ function signup() {
     setUsernameLoading(false)
   };
 
-
-
   useEffect(() => {
     username===""? setUsernameAvailable(false):checkUsername();
 
   }, [username])
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -115,6 +112,7 @@ function signup() {
   return (
     <>
       <HeaderMessage />
+      
       <Form
         loading={formLoading}
         error={errorMsg !== null}
@@ -210,7 +208,9 @@ function signup() {
            disabled={submitDisabled || !usernameAvailable}
            />
         </Segment>
+
       </Form>
+
       <FooterMessage />
     </>
   );
